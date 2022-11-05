@@ -18,8 +18,8 @@ function blur(img: PixelMap<PixelValue>, blurSize: number) {
           surroundingX < blurSize * 2;
           surroundingX++
         ) {
-          const mirroredY = y + surroundingY;
-          const mirroredX = x + surroundingX;
+          const mirroredY = Math.ceil(y + surroundingY - blurSize);
+          const mirroredX = Math.ceil(x + surroundingX - blurSize);
 
           const isValidPosition =
             mirroredY > 0 &&
@@ -34,12 +34,10 @@ function blur(img: PixelMap<PixelValue>, blurSize: number) {
             );
 
             if (distanceFromCenter <= blurSize) {
-              const blurWeight = 1 - distanceFromCenter / blurSize;
+              const blurWeight = distanceFromCenter / blurSize;
 
-              totalPixelValue +=
-                img[mirroredY][mirroredX] -
-                img[mirroredY][mirroredX] * blurWeight;
-              mapCount += 1;
+              totalPixelValue += img[mirroredY][mirroredX] * blurWeight;
+              mapCount += blurWeight;
             }
           }
         }

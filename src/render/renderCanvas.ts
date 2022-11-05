@@ -3,14 +3,21 @@ import http from "http";
 
 import { PixelMap, PixelValue } from "../utils";
 
-function renderCanvas(res: http.ServerResponse, img: PixelMap<PixelValue>) {
+function renderCanvas(
+  res: http.ServerResponse,
+  img: PixelMap<PixelValue>,
+  pixelScale: number
+) {
   const width = img[0].length;
   const height = img.length;
 
   const canvas = createCanvas(width, height);
   const ctx = canvas.getContext("2d");
 
-  const imageData = createImageData(convertGrayscaleMapToUint8(img), width);
+  const imageData = createImageData(
+    convertGrayscaleMapToUint8(img, pixelScale),
+    width
+  );
   ctx.putImageData(imageData, 0, 0);
 
   return res.write(
@@ -18,11 +25,14 @@ function renderCanvas(res: http.ServerResponse, img: PixelMap<PixelValue>) {
   );
 }
 
-function convertGrayscaleMapToUint8(imgMap: PixelMap<PixelValue>) {
+function convertGrayscaleMapToUint8(
+  imgMap: PixelMap<PixelValue>,
+  pixelScale: number
+) {
   let pixelArray: number[] = [];
 
   imgMap.flat().forEach((v) => {
-    const a = 255 - (255 * v) / 100;
+    const a = 255 - (255 * v) / pixelScale;
 
     pixelArray.push(0); /* R */
     pixelArray.push(0); /* G */
