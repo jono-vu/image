@@ -26,7 +26,11 @@ function createStripes<TPixelValue>(
       sectionIndex < height - 1;
       sectionIndex += stripeWidth + stripeGap
     ) {
-      for (let stripedIndex = 0; stripedIndex < stripeWidth; stripedIndex + 1) {
+      for (
+        let stripedIndex = 0;
+        stripedIndex < stripeWidth;
+        stripedIndex = stripedIndex + 1
+      ) {
         outputMap[stripedIndex].map((_) => pixelValues[1]);
       }
     }

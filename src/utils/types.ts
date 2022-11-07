@@ -12,4 +12,10 @@ type RGBA = {
   a: number;
 };
 
+enum Direction {
+  HORIZONTAL = "horizontal",
+  COLUMN = "column",
+}
+
+export { Direction };
 export type { PixelMap, Row, Cell, PixelValue, RGBA };

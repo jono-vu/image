@@ -3,8 +3,8 @@ import { PixelMap, PixelValue, RGBA } from "../utils/types";
 
 /*
  *
- * Displace a grayscale map to the right
- * by an input of a grayscale map.
+ * Displace a Pixel Map to the right
+ * by an input of another Pixel Map.
  *
  */
 

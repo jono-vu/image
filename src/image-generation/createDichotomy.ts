@@ -1,9 +1,4 @@
-import { arrayFrom, PixelMap } from "../utils";
-
-enum Direction {
-  HORIZONTAL = "horizontal",
-  COLUMN = "column",
-}
+import { arrayFrom, Direction, PixelMap } from "../utils";
 
 function createDichotomy<TPixelValue>(
   width: number,
