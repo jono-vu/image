@@ -1,4 +1,4 @@
-import { arrayFrom, PixelMap, PixelValue } from "../utils";
+import { arrayFrom, PixelMap } from "../utils";
 
 function createCircleStripes<TPixelValue>(
   width: number,

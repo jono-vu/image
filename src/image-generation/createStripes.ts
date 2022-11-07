@@ -1,5 +1,5 @@
 import { arrayFrom } from "../utils/arrayFrom";
-import { PixelMap, PixelValue } from "../utils/types";
+import { PixelMap } from "../utils/types";
 
 enum Direction {
   HORIZONTAL = "horizontal",
