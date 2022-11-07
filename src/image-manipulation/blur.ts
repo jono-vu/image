@@ -1,11 +1,16 @@
-import { PixelMap, PixelValue } from "../utils";
+import { isPixelGrayscale, PixelMap, PixelValue, RGBA } from "../utils";
 
-function blur(img: PixelMap<PixelValue>, blurSize: number) {
+function blur<TPixelValue = PixelValue | RGBA>(
+  img: PixelMap<TPixelValue>,
+  blurSize: number
+) {
   let outputImg = img;
 
   img.forEach((row, y) => {
-    row.forEach((_, x) => {
-      let totalPixelValue = 0;
+    row.forEach((pixel, x) => {
+      let totalGrayscalePixelValue = 0;
+      let totalRGBAPixelValues = { r: 0, g: 0, b: 0, a: 0 };
+
       let mapCount = 0;
 
       for (
@@ -36,15 +41,47 @@ function blur(img: PixelMap<PixelValue>, blurSize: number) {
             if (distanceFromCenter <= blurSize) {
               const blurWeight = distanceFromCenter / blurSize;
 
-              totalPixelValue += img[mirroredY][mirroredX] * blurWeight;
-              mapCount += blurWeight;
+              const mirroredPixelValue = img[mirroredY][mirroredX];
+
+              if (!pixel) {
+                return;
+              }
+
+              if (isPixelGrayscale(pixel)) {
+                totalGrayscalePixelValue +=
+                  (mirroredPixelValue as PixelValue) * blurWeight;
+
+                mapCount += blurWeight;
+              } else {
+                totalRGBAPixelValues.r +=
+                  (mirroredPixelValue as RGBA).r * blurWeight;
+                totalRGBAPixelValues.g +=
+                  (mirroredPixelValue as RGBA).g * blurWeight;
+                totalRGBAPixelValues.b +=
+                  (mirroredPixelValue as RGBA).b * blurWeight;
+                totalRGBAPixelValues.a +=
+                  (mirroredPixelValue as RGBA).a * blurWeight;
+
+                mapCount += blurWeight;
+              }
             }
           }
         }
       }
 
-      const averageValue = totalPixelValue / mapCount;
-      outputImg[y][x] = averageValue;
+      if (isPixelGrayscale(pixel)) {
+        const averageGrayscaleValue = totalGrayscalePixelValue / mapCount;
+        outputImg[y][x] = averageGrayscaleValue as TPixelValue;
+      } else {
+        const averageRGBAValue = {
+          r: totalRGBAPixelValues.r / mapCount,
+          g: totalRGBAPixelValues.r / mapCount,
+          b: totalRGBAPixelValues.r / mapCount,
+          a: totalRGBAPixelValues.r / mapCount,
+        };
+
+        outputImg[y][x] = averageRGBAValue as TPixelValue;
+      }
     });
   });
 

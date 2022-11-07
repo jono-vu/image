@@ -1,12 +1,12 @@
-import { arrayFrom, PixelMap, PixelValue } from "../utils";
+import { arrayFrom, PixelMap } from "../utils";
 
-function createCircle(
+function createCircle<TPixelValue>(
   width: number,
   height: number,
   radius: number,
-  pixelValues: [PixelValue, PixelValue]
+  pixelValues: [TPixelValue, TPixelValue]
 ) {
-  let outputMap: PixelMap<PixelValue> = arrayFrom(height).map((_) =>
+  let outputMap: PixelMap<TPixelValue> = arrayFrom(height).map((_) =>
     arrayFrom(width).map((_) => pixelValues[0])
   );
 

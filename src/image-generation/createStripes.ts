@@ -6,15 +6,15 @@ enum Direction {
   COLUMN = "column",
 }
 
-function createStripes(
+function createStripes<TPixelValue>(
   width: number,
   height: number,
   stripeWidth: number,
   stripeGap: number,
-  pixelValues: [PixelValue, PixelValue],
+  pixelValues: [TPixelValue, TPixelValue],
   direction?: Direction
 ) {
-  const initialMap: PixelMap<PixelValue> = arrayFrom(height).map((_) =>
+  const initialMap: PixelMap<TPixelValue> = arrayFrom(height).map((_) =>
     arrayFrom(width).map((_) => pixelValues[0])
   );
 

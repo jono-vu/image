@@ -1,13 +1,13 @@
 import { arrayFrom, PixelMap, PixelValue } from "../utils";
 
-function createCircleStripes(
+function createCircleStripes<TPixelValue>(
   width: number,
   height: number,
   stripeWidth: number,
   stripeGap: number,
-  pixelValues: [PixelValue, PixelValue]
+  pixelValues: [TPixelValue, TPixelValue]
 ) {
-  let outputMap: PixelMap<PixelValue> = arrayFrom(height).map((_) =>
+  let outputMap: PixelMap<TPixelValue> = arrayFrom(height).map((_) =>
     arrayFrom(width).map((_) => pixelValues[0])
   );
 

@@ -1,4 +1,5 @@
-import { PixelMap, PixelValue } from "../utils/types";
+import { isPixelGrayscale } from "../utils";
+import { PixelMap, PixelValue, RGBA } from "../utils/types";
 
 /*
  *
@@ -7,9 +8,9 @@ import { PixelMap, PixelValue } from "../utils/types";
  *
  */
 
-function displacementMap(
-  origImg: PixelMap<PixelValue>,
-  inputImg: PixelMap<PixelValue>,
+function displacementMap<TPixelValue = PixelValue | RGBA>(
+  origImg: PixelMap<TPixelValue>,
+  inputImg: PixelMap<TPixelValue>,
   pixelScale: number,
   wrap: boolean,
   range: [number, number],
@@ -17,13 +18,13 @@ function displacementMap(
 ) {
   const imgLength = origImg[0].length;
 
-  let outputImg: PixelMap<PixelValue | null> = origImg.map((y) =>
+  let outputImg: PixelMap<TPixelValue | null> = origImg.map((y) =>
     y.map((_) => null)
   );
 
   origImg.forEach((origRow, origY) => {
     origRow.forEach((origPixelValue, origX) => {
-      const inputPixelValue = inputImg[origY][origX] as number;
+      const inputPixelValue = inputImg[origY][origX] as TPixelValue;
 
       const displacedX = displacePosition(
         origX,
@@ -57,22 +58,33 @@ function displacementMap(
           return undefined;
         })
         .filter((cell) => cell !== undefined)
-    ) as PixelMap<PixelValue>;
+    ) as PixelMap<TPixelValue>;
   }
 
-  return outputImg as PixelMap<PixelValue>;
+  return outputImg as PixelMap<TPixelValue>;
 }
 
 export { displacementMap };
 
-function displacePosition(
+function displacePosition<TPixelValue = PixelValue | RGBA>(
   originalPosition: number,
-  inputPixelValue: PixelValue,
+  inputPixel: TPixelValue,
   displacementScale: number,
   distortionFactor?: number
 ) {
+  let inputValue = 0;
+
+  if (!inputPixel) {
+    inputValue = 0;
+  } else if (isPixelGrayscale(inputPixel)) {
+    inputValue = inputPixel as number;
+  } else {
+    const { r, g, b, a } = inputPixel as unknown as RGBA;
+    inputValue = (r + g + b + a) / 4;
+  }
+
   return (
     originalPosition +
-    Math.ceil(displacementScale * inputPixelValue * (distortionFactor || 1))
+    Math.ceil(displacementScale * inputValue * (distortionFactor || 1))
   );
 }

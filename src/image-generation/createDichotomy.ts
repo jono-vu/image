@@ -1,18 +1,18 @@
-import { arrayFrom } from "../utils/arrayFrom";
-import { PixelMap, PixelValue } from "../utils/types";
+import { arrayFrom } from "../utils";
+import { PixelMap, PixelValue } from "../utils";
 
 enum Direction {
   HORIZONTAL = "horizontal",
   COLUMN = "column",
 }
 
-function createDichotomy(
+function createDichotomy<TPixelValue>(
   width: number,
   height: number,
-  pixelValues: [PixelValue, PixelValue],
+  pixelValues: [TPixelValue, TPixelValue],
   direction?: Direction
 ) {
-  const initialMap: PixelMap<PixelValue> = arrayFrom(height).map((_) =>
+  const initialMap: PixelMap<TPixelValue> = arrayFrom(height).map((_) =>
     arrayFrom(width).map((_) => pixelValues[0])
   );
 
